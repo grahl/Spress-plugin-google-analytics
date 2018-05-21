@@ -43,7 +43,6 @@ class SpressGoogleAnalytics implements PluginInterface
     public function onAfterRender(RenderEvent $event)
     {
 
-      // Google Analytics Content.
       $ga_code = "
       <!-- Google Analytics Tracker -->
       <script>
@@ -57,13 +56,9 @@ class SpressGoogleAnalytics implements PluginInterface
       </script>
       <!-- End of Google Analytics Tracker -->";
 
-
-      // Validate if Google Analytics settigns are available.
       if(isset($this->googleAnalyticsID) && isset($this->googleAnalyticsSite)) {
-        // Get content
         $content = $event->getContent();
 
-        // Set google analytics variables
         $ga_code = str_replace('GA_ID', $this->googleAnalyticsID, $ga_code);
         $ga_code = str_replace('GA_SITE', $this->googleAnalyticsSite, $ga_code);
         if (isset($this->googleAnalyticsParams)) {
