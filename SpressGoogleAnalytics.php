@@ -11,6 +11,7 @@ class SpressGoogleAnalytics implements PluginInterface
 {
     protected $googleAnalyticsID;
     protected $googleAnalyticsSite;
+    protected $googleAnalyticsParams;
 
     public function initialize(EventSubscriber $subscriber)
     {
@@ -35,6 +36,7 @@ class SpressGoogleAnalytics implements PluginInterface
         if(isset($configValues['google_analytics'])) {
             $this->googleAnalyticsID = $configValues['google_analytics']['id'];
             $this->googleAnalyticsSite = $configValues['google_analytics']['site'];
+            $this->googleAnalyticsParams = $configValues['google_analytics']['params'];
         }
     }
 
@@ -64,6 +66,10 @@ class SpressGoogleAnalytics implements PluginInterface
         // Set google analytics variables
         $ga_code = str_replace('GA_ID', $this->googleAnalyticsID, $ga_code);
         $ga_code = str_replace('GA_SITE', $this->googleAnalyticsSite, $ga_code);
+        if (isset($this->googleAnalyticsParams)) {
+          $replacement = 'pageview\', ' . json_encode($this->googleAnalyticsParams) . ');';
+          $ga_code = str_replace('pageview\');', $replacement, $ga_code);
+        }
 
         // Append Google Analytics code to end of page
         $content= str_replace('</body>', $ga_code . "\n </body> ", $content);
